@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.gms.google-services") version "4.4.2" apply false
+
 }
 
 android {
@@ -40,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.firebase.auth.ktx)
     val nav_version = "2.8.5"
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -72,4 +75,6 @@ dependencies {
 
 
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
 }

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "155906372766",
+    "project_id": "authkotlin-1a062",
+    "storage_bucket": "authkotlin-1a062.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:155906372766:android:8b5f790ea119f88114b78f",
+        "android_client_info": {
+          "package_name": "com.example.homework4"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDFo6LDfJaEGQI014DJ7LhxuyJVOuQt9F8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
