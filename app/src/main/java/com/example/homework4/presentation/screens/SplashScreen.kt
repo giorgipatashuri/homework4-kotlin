@@ -40,7 +40,7 @@ fun SplashScreen(
 //        }
 //    }
     LaunchedEffect(Unit) {
-        delay(3000)  // 3-second delay
+        delay(1000)  // 3-second delay
         navController.navigate(AppRoute.FirstScreen.route) {
             popUpTo(AppRoute.Splash.route) { inclusive = true }
         }
@@ -58,7 +58,7 @@ fun SplashScreen(
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            CircularProgressIndicator(color = Color.White)
+            CircularProgressIndicator(color = Color.Black)
         }
     }
 }

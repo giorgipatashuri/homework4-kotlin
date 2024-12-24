@@ -1,28 +1,60 @@
-package com.example.homework4.data.implementation
-
-import com.example.homework4.data.service.AuthService
-import com.example.homework4.domain.model.AuthResult
+import com.example.homework4.data.remote.FirebaseAuthDataSource
 import com.example.homework4.domain.model.User
 import com.example.homework4.domain.repository.AuthRepository
+import javax.inject.Inject
+import kotlin.Result
 
-class AuthRepositoryImpl(
-    private val authService: AuthService,
-    private val userDao: UserDao,
-//    private val tokenManager: TokenManager
+class AuthRepositoryImpl @Inject constructor(
+    private val firebaseAuthDataSource: FirebaseAuthDataSource
 ) : AuthRepository {
-    override suspend fun login(email: String, password: String): AuthResult<User> {
+    override suspend fun signUp(email: String, password: String): Result<User> {
         return try {
-            val response = authService.login(LoginRequest(email, password))
-            if (response.isSuccessful) {
-                val userDto = response.data
-//                tokenManager.saveToken(userDto.token)
-                userDao.insertUser(userDto.toUserEntity())
-                AuthResult.Success(userDto.toDomainModel())
+            val firebaseUser = firebaseAuthDataSource.signUp(email, password)
+            if (firebaseUser != null) {
+                Result.success(User(
+                    id = firebaseUser.uid,
+                    email = firebaseUser.email ?: ""
+                ))
             } else {
-                AuthResult.Error(response.message ?: "Login failed")
+                Result.failure(Exception("Sign up failed"))
             }
         } catch (e: Exception) {
-            AuthResult.Error(e.localizedMessage ?: "Unknown error")
+            Result.failure(Exception(e.localizedMessage ?: "Unknown error"))
+        }
+    }
+
+    override suspend fun signIn(email: String, password: String): Result<User> {
+        return try {
+            val firebaseUser = firebaseAuthDataSource.signIn(email, password)
+            if (firebaseUser != null) {
+                Result.success(User(
+                    id = firebaseUser.uid,
+                    email = firebaseUser.email ?: ""
+                ))
+            } else {
+                Result.failure(Exception("Sign in failed"))
+            }
+        } catch (e: Exception) {
+            Result.failure(Exception(e.localizedMessage ?: "Unknown error"))
+        }
+    }
+
+    override suspend fun signOut(): Result<Unit> {
+        return try {
+            firebaseAuthDataSource.signOut()
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(Exception(e.localizedMessage ?: "Sign out failed"))
+        }
+    }
+
+    override fun getCurrentUser(): User? {
+        val firebaseUser = firebaseAuthDataSource.getCurrentUser()
+        return firebaseUser?.let {
+            User(
+                id = it.uid,
+                email = it.email ?: ""
+            )
         }
     }
 }
